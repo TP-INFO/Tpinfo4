@@ -1,0 +1,6 @@
+c:\users\34011-36-01\documents\visual studio 2015\Projects\Tpinfo4\Tpinfo4\bin\Debug\Tpinfo4.exe.config
+c:\users\34011-36-01\documents\visual studio 2015\Projects\Tpinfo4\Tpinfo4\bin\Debug\Tpinfo4.exe
+c:\users\34011-36-01\documents\visual studio 2015\Projects\Tpinfo4\Tpinfo4\bin\Debug\Tpinfo4.pdb
+c:\users\34011-36-01\documents\visual studio 2015\Projects\Tpinfo4\Tpinfo4\obj\Debug\Tpinfo4.csprojResolveAssemblyReference.cache
+c:\users\34011-36-01\documents\visual studio 2015\Projects\Tpinfo4\Tpinfo4\obj\Debug\Tpinfo4.exe
+c:\users\34011-36-01\documents\visual studio 2015\Projects\Tpinfo4\Tpinfo4\obj\Debug\Tpinfo4.pdb
