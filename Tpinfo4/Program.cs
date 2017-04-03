@@ -10,6 +10,7 @@ namespace Tpinfo4
     {
         static void Main(string[] args)
         {
+			Console.WriteLine("Tapez \" x \" ");
         }
     }
 }
