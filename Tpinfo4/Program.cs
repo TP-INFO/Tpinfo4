@@ -119,6 +119,10 @@ namespace _2017_02_22_TP_Morpion
 
         }
 
+        /// <summary>
+        /// Méthode renvoyant le tableau des coordonnées du placement de l'ordinateur
+        /// </summary>
+        /// <returns></returns>
         static int[] PlacementOrdi()
         {
             Random random1 = new Random();
@@ -129,6 +133,12 @@ namespace _2017_02_22_TP_Morpion
             return placement;
         }
 
+        /// <summary>
+        /// Méthode renvoyant un tableau contenant les coordonnees du placement du joueur
+        /// </summary>
+        /// <param name="abscisse"></param>
+        /// <param name="ordonnee"></param>
+        /// <returns></returns>
         static int[] PlacementJoueur(int abscisse, int ordonnee)
         {
             int[] placement = { abscisse, ordonnee };
@@ -147,12 +157,27 @@ namespace _2017_02_22_TP_Morpion
             }
         }
 
+        /// <summary>
+        /// Méthode renvoyant le morpion modifié après coup
+        /// </summary>
+        /// <param name="abscisse"></param>
+        /// <param name="ordonnee"></param>
+        /// <param name="morpion"></param>
+        /// <param name="jeton"></param>
+        /// <returns></returns>
         static char[,] MorpionModifie (int abscisse, int ordonnee, char[,] morpion, char jeton)
         {
             morpion[abscisse, ordonnee] = jeton;
             return morpion;
         }
 
+        /// <summary>
+        /// Méthode statique renvoyant true si le placement est possible (case non occupée par un jeton) ou false si non
+        /// </summary>
+        /// <param name="abscisse"></param>
+        /// <param name="ordonnee"></param>
+        /// <param name="morpion"></param>
+        /// <returns></returns>
         static bool PlacementPossible (int abscisse, int ordonnee, char[,] morpion)
         {
             if (morpion[abscisse, ordonnee]=='0')
@@ -165,9 +190,16 @@ namespace _2017_02_22_TP_Morpion
             }
         }
 
+        /// <summary>
+        /// Méthode statique renvoyant un booléen : true si un joueur a gagné, false si le jeu continue
+        /// </summary>
+        /// <param name="morpion"></param>
+        /// <returns></returns>
         static bool Gagne (char[,] morpion)
         {
             bool gagne = false;
+
+            //On détermine si une ligne est gagnante
             for (int i = 0; i < 3; i++)
             {
                 if (morpion[i, 0] == morpion[i, 1] && morpion[i, 1] == morpion[i, 2] && morpion[i,1]!='0')
@@ -175,6 +207,8 @@ namespace _2017_02_22_TP_Morpion
                     gagne = true;
                 }
             }
+
+            //On détermine si une colonne est gagnante
             for (int j = 0; j < 3; j++)
             {
                 if (morpion[0, j] == morpion[1, j] && morpion[1, j] == morpion[2, j] && morpion[1, j] != '0')
@@ -182,13 +216,22 @@ namespace _2017_02_22_TP_Morpion
                     gagne = true;
                 }
             }
+
+            //On détermine si une diagonale est gagnante
             if ((morpion[0,0]==morpion[1,1] && morpion[1,1]==morpion[2,2]) || (morpion[2, 0] == morpion[1, 1] && morpion[1, 1] == morpion[0, 2]) && morpion[1,1]!='0')
             {
                 gagne = true;
             }
+
             return gagne;
         }
 
+        /// <summary>
+        /// Méthode statique renvoyant un string indiquant le gagnant de la partie
+        /// </summary>
+        /// <param name="nombreCoups"></param>
+        /// <param name="nombreParties"></param>
+        /// <returns></returns>
         static string JoueurGagnant(int nombreCoups, int nombreParties)
         {
             string joueurGagnant = "ordi";
@@ -198,7 +241,13 @@ namespace _2017_02_22_TP_Morpion
             }
             return joueurGagnant;
         }
-
+        
+        /// <summary>
+        /// Méthode statique déterminant le jeton du joueur pour la partie en cours
+        /// </summary>
+        /// <param name="nombreParties"></param>
+        /// <param name="premierJeton"></param>
+        /// <returns></returns>
         static char JetonJoueur (int nombreParties, char premierJeton)
         {
             char jetonJoueur;
@@ -217,6 +266,11 @@ namespace _2017_02_22_TP_Morpion
             return jetonJoueur;
         }
 
+        /// <summary>
+        /// Méthode statique renvoyant un string qui indique le joueur débutant en fonction du nombre de parties
+        /// </summary>
+        /// <param name="nombreParties"></param>
+        /// <returns></returns>
         static string JoueurDebutant(int nombreParties)
         {
             string joueurDebutant;
