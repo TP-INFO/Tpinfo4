@@ -10,7 +10,22 @@ namespace Tpinfo4
     {
         static void Main(string[] args)
         {
-			Console.WriteLine("Tapez \" x \" ");
+			foreach (string arg in args)
+			{
+				if (args.Length >= 1)
+				{
+					switch (arg)
+					{
+						case "jouer":
+							// appel de la méthode Jouer
+							Jouer.JouerPartie();
+								break;
+						default:
+							Console.WriteLine("Tapez la commande \"jouer\" pour commencer une partie.");
+								break;
+					}	
+				}
+			}
         }
     }
 }
