@@ -29,34 +29,22 @@ namespace Tpinfo4
 
 		private static void GamePlay(char z)
 		{
-
 			char[,] matrice = new char[4, 4];
 
 			// entrée d'une combinaison par le USER pour placer un pion
-			Console.WriteLine("Entrez une combinaison (ex: 32):");
+			Console.WriteLine("Entrez une combinaison (ex: i0):");
 			Console.ReadLine();
-			if (Console.ReadLine() == "32")
+			if (Console.ReadLine() == "i0")
 			{
 			matrice[3, 2] = z;
 			}
-
-
+			
 			// CPC joue
-			for (int i = 0; i < matrice.GetLength(0); i++)
-			{
-				for (int j = 0; j < matrice.GetLength(1); j++)
-				{
-					Random rnd = new Random(3);
-					i = rnd.Next(3);
-					j = rnd.Next(3);
-					matrice[i, j] = 'O';
-				
 
-				}
-			}
-	
 
-			// affichage de l matrice
+
+
+			// affichage de la matrice
 			for (int i = 0; i < matrice.GetLength(0); i++)
 			{
 				for (int j = 0; j < matrice.GetLength(1); j++)
@@ -68,15 +56,15 @@ namespace Tpinfo4
 					matrice[0, 3] = '3';
 
 					matrice[0, 0] = '_';
-					matrice[1, 0] = 'A';
-					matrice[2, 0] = 'B';
-					matrice[3, 0] = 'C';
-
-				
-					Console.Write(matrice[i, j]);
+					matrice[1, 0] = '1';
+					matrice[2, 0] = '2';
+					matrice[3, 0] = '3';
+					Console.Write(matrice[i,j]);
 				}
 				Console.WriteLine();
 			}
+
+
 		}
 	}
 }
