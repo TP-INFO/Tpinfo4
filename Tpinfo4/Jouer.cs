@@ -10,21 +10,26 @@ namespace Tpinfo4
 	{
 		public static void JouerPartie()
 		{
-			char a = 'X';
-			char b = 'O';
-			Console.Write("Choisissez {0} ou {1}:", a, b);
-			if (Console.Read() == a)
+			// modification de l'input pour eviter exception error dans méthode Gameplat (thanks to Mohammed)
+			Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
+			string userinput = Console.ReadLine();
+
+			if (userinput == "X")
 			{
 				//Console.WriteLine("Vous avez tapez {0}", a);
-				GamePlay(a);
+				GamePlay(userinput[0]);
 
 			}
-			else if (Console.Read() == b)
+			else if (userinput == "O")
 			{
 				//Console.WriteLine("Vous avez tapez {0}", b);
-				GamePlay(b);
+				GamePlay(userinput[0]);
 			}
-			
+			else
+			{
+				Console.WriteLine("Invalid input ");
+				System.Environment.Exit(0);
+			}
 		}
 
 		/// <summary>
@@ -44,19 +49,27 @@ namespace Tpinfo4
 
 				if (PlaceDispo > 0)
 				{
-					Console.WriteLine();
-					Console.WriteLine("Ligne :Entrez un chiffre entre 1 et 3 :");
-					char ligne = Convert.ToChar(Console.Read());
-					int chiffre1 = (int)Char.GetNumericValue(ligne);
+					// input ligne
+					Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
+					string input = Console.ReadLine();
+					int chiffre1 = Convert.ToInt32(input);
+					//input colonne
+					Console.Write("Colonne > Entrez un chiffre entre 1 et 3: ");
+					string input2 = Console.ReadLine();
+					int chiffre2 = Convert.ToInt32(input2);
 
-					Console.WriteLine("Colonne :Entrez un chiffre entre 1 et 3 :");
-					char ligne2 = Convert.ToChar(Console.Read());
-					int chiffre2 = (int)Char.GetNumericValue(ligne);
-
+					// pour éviter rejouer sur case déjà occupée (donc != 0)
 					while (matrice[chiffre1, chiffre2] != 0)
-			{
+					{
 						Console.WriteLine("Cette case est déjà prise!");
-						Console.WriteLine("Entrez une combinaison entre 1 et 3 (ex: 1/2):");
+						// input ligne
+						Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
+						input = Console.ReadLine();
+						chiffre1 = Convert.ToInt32(input);
+						// input colonne
+						Console.Write("Colonne > Entrez un chiffre entre 1 et 3: ");
+						input2 = Console.ReadLine();
+						chiffre2 = Convert.ToInt32(input2);
 					}
 					matrice[chiffre1, chiffre2] = 'X';
 					PlaceDispo--;
