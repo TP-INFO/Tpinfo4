@@ -27,22 +27,29 @@ namespace Tpinfo4
 			
 		}
 
+		/// <summary>
+		/// méthode établissant les coups des joueurs
+		/// </summary>
+		/// <param name="z"></param>
 		private static void GamePlay(char z)
 		{
 			char[,] matrice = new char[4, 4];
-
-			// entrée d'une combinaison par le USER pour placer un pion
+			int nbrepartie = 0;
+			do
+			{
+			// entrée d'une combinaison par le USER pour placer un crois
 			Console.WriteLine("Entrez une combinaison (ex: i0):");
 			Console.ReadLine();
 			if (Console.ReadLine() == "i0")
 			{
 			matrice[3, 2] = z;
 			}
-			
+
 			// CPC joue
-
-
-
+			Random rnd = new Random();
+			int k = rnd.Next(1,3);
+			int m = rnd.Next(1,3);
+			matrice[k, m] = 'O';
 
 			// affichage de la matrice
 			for (int i = 0; i < matrice.GetLength(0); i++)
@@ -63,6 +70,13 @@ namespace Tpinfo4
 				}
 				Console.WriteLine();
 			}
+
+
+				nbrepartie++;
+			} while (nbrepartie < 4);
+			
+			//partie 2
+
 
 
 		}
