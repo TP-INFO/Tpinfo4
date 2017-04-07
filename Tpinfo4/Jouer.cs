@@ -10,8 +10,8 @@ namespace Tpinfo4
 	{
 		public static void JouerPartie()
 		{
-			char a = 'x';
-			char b = 'o';
+			char a = 'X';
+			char b = 'O';
 			Console.Write("Choisissez {0} ou {1}:", a, b);
 			if (Console.Read() == a)
 			{
