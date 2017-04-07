@@ -45,19 +45,18 @@ namespace Tpinfo4
 				if (PlaceDispo > 0)
 				{
 					Console.WriteLine();
-					Console.WriteLine("Entrez une combinaison entre 1 et 3 (ex: 1-2):");
-					string combinaison = Console.ReadLine();
+					Console.WriteLine("Ligne :Entrez un chiffre entre 1 et 3 :");
+					char ligne = Convert.ToChar(Console.Read());
+					int chiffre1 = (int)Char.GetNumericValue(ligne);
 
-					int chiffre1 = combinaison[0] - '0';
-					int chiffre2 = combinaison[2] - '0';
+					Console.WriteLine("Colonne :Entrez un chiffre entre 1 et 3 :");
+					char ligne2 = Convert.ToChar(Console.Read());
+					int chiffre2 = (int)Char.GetNumericValue(ligne);
 
 					while (matrice[chiffre1, chiffre2] != 0)
 			{
 						Console.WriteLine("Cette case est déjà prise!");
-						Console.WriteLine("Entrez une combinaison entre 1 et 3 (ex: 1-2):");
-						combinaison = Console.ReadLine();
-						chiffre1 = combinaison[0] - '0';
-						chiffre2 = combinaison[2] - '0';
+						Console.WriteLine("Entrez une combinaison entre 1 et 3 (ex: 1/2):");
 					}
 					matrice[chiffre1, chiffre2] = 'X';
 					PlaceDispo--;
@@ -190,11 +189,14 @@ namespace Tpinfo4
 				nbreCoup++;
 				Console.WriteLine($"Nbre de coup : {nbreCoup}");
 
+				#region Match nul
+				// cas match nul
 				if (PlaceDispo == 0)
 				{
-					Console.WriteLine("Match null");
+					Console.WriteLine("Match nul!");
 					break;
 				}
+				#endregion
 			}
 
 
