@@ -34,22 +34,58 @@ namespace Tpinfo4
 		private static void GamePlay(char z)
 		{
 			char[,] matrice = new char[4, 4];
-			int nbrepartie = 0;
-			do
-			{
-			// entrée d'une combinaison par le USER pour placer un crois
-			Console.WriteLine("Entrez une combinaison (ex: i0):");
-			Console.ReadLine();
-			if (Console.ReadLine() == "i0")
-			{
-			matrice[3, 2] = z;
-			}
+			int nbreCoup = 0;
+			bool rejouer = true;
+			int PlaceDispo = 9;
 
-			// CPC joue
-			Random rnd = new Random();
-			int k = rnd.Next(1,3);
-			int m = rnd.Next(1,3);
-			matrice[k, m] = 'O';
+			while (rejouer)
+			{
+				//entrée d'une combinaison par le USER pour placer un pion
+
+				if (PlaceDispo > 0)
+				{
+					Console.WriteLine();
+					Console.WriteLine("Entrez une combinaison entre 1 et 3 (ex: 1-2):");
+					string combinaison = Console.ReadLine();
+
+					int chiffre1 = combinaison[0] - '0';
+					int chiffre2 = combinaison[2] - '0';
+
+					while (matrice[chiffre1, chiffre2] != 0)
+			{
+						Console.WriteLine("Cette case est déjà prise!");
+						Console.WriteLine("Entrez une combinaison entre 1 et 3 (ex: 1-2):");
+						combinaison = Console.ReadLine();
+						chiffre1 = combinaison[0] - '0';
+						chiffre2 = combinaison[2] - '0';
+					}
+					matrice[chiffre1, chiffre2] = 'X';
+					PlaceDispo--;
+			}
+			
+
+
+				///////////////// CPC joue
+
+
+
+				Random rnd = new Random();
+				int k = rnd.Next(1, 4);
+				int m = rnd.Next(1, 4);
+
+				if (PlaceDispo > 0)
+				{
+
+					while (matrice[k, m] != 0)
+					{
+						k = rnd.Next(1, 4);
+						m = rnd.Next(1, 4);
+					}
+					matrice[k, m] = 'O';
+					PlaceDispo--;
+				}
+
+
 
 			// affichage de la matrice
 			for (int i = 0; i < matrice.GetLength(0); i++)
@@ -66,16 +102,103 @@ namespace Tpinfo4
 					matrice[1, 0] = '1';
 					matrice[2, 0] = '2';
 					matrice[3, 0] = '3';
-					Console.Write(matrice[i,j]);
+						Console.Write(matrice[i, j]);
 				}
 				Console.WriteLine();
 			}
 
 
-				nbrepartie++;
-			} while (nbrepartie < 4);
-			
-			//partie 2
+				//calcul cas de victoire
+
+				#region Victoires USER
+
+				// horizontale
+				if (((matrice[1, 1] == 'X') && (matrice[1, 2] == 'X') && (matrice[1, 3] == 'X')) || ((matrice[2, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[2, 3] == 'X')))
+				{
+					Console.WriteLine("Vous avez gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+				else if ((matrice[3, 1] == 'X') && (matrice[3, 2] == 'X') && (matrice[3, 3] == 'X'))
+				{
+					Console.WriteLine("Vous avez gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+				// verticale
+				if (((matrice[1, 1] == 'X') && (matrice[2, 1] == 'X') && (matrice[3, 1] == 'X')) || ((matrice[1, 2] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 2] == 'X')))
+				{
+					Console.WriteLine("Vous avez gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+				else if ((matrice[1, 3] == 'X') && (matrice[2, 3] == 'X') && (matrice[3, 3] == 'X'))
+				{
+					Console.WriteLine("Vous avez gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+
+				// diagonale
+				else if ((matrice[1, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 3] == 'X') || (matrice[1, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 3] == 'X'))
+				{
+					Console.WriteLine("Vous avez gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+
+				#endregion
+
+
+				#region Victoires CPC
+				// horizontale
+				if (((matrice[1, 1] == 'O') && (matrice[1, 2] == 'O') && (matrice[1, 3] == 'O')) || ((matrice[2, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[2, 3] == 'O')))
+				{
+					Console.WriteLine("CPC a gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+				else if ((matrice[3, 1] == 'O') && (matrice[3, 2] == 'O') && (matrice[3, 3] == 'O'))
+				{
+					Console.WriteLine("CPC a gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+				// verticale
+				if (((matrice[1, 1] == 'O') && (matrice[2, 1] == 'O') && (matrice[3, 1] == 'O')) || ((matrice[1, 2] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 2] == 'O')))
+				{
+					Console.WriteLine("CPC a gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+				else if ((matrice[1, 3] == 'O') && (matrice[2, 3] == 'O') && (matrice[3, 3] == 'O'))
+				{
+					Console.WriteLine("CPC a gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+
+				// diagonale
+				else if ((matrice[1, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 3] == 'O') || (matrice[1, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 3] == 'O'))
+				{
+					Console.WriteLine("CPC a gagné en {0} coups", nbreCoup + 1);
+					rejouer = false;
+					break;
+				}
+
+				#endregion
+				nbreCoup++;
+				Console.WriteLine($"Nbre de coup : {nbreCoup}");
+
+				if (PlaceDispo == 0)
+				{
+					Console.WriteLine("Match null");
+					break;
+				}
+			}
+
+
+			Console.WriteLine("Voulez-vous rejouer?");
 
 
 
