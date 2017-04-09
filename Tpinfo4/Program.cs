@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Tpinfo4
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
+	class Program
+	{
+		static void Main(string[] args)
+
+		{
 			// appel de la méthode Jouer
-			Jouer.JouerPartie();
+			Jouer.ChoisirJeton();
         }
     }
 }
