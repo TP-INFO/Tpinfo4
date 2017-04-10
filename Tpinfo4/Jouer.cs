@@ -10,20 +10,75 @@ namespace Tpinfo4
 	{
 		public static void ChoisirJeton()
 		{
-			while (true)  // boucle de traitement erreur de frappe
-			{
-				Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
-				string userInput = Console.ReadLine().ToUpper();
+			string userInput = "null";
+			char joueurCPC = '0';
 
-				if (userInput == "X" || userInput == "O")
+			int countAquiLeTour = 2;
+
+			if ((countAquiLeTour % 2) == 0)
+			{
+				do  // boucle de validation input 
 				{
-					GamePlay(userInput[0]);     // appel de la méthode Gameplay avec passage en parametre du jeton
+					Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
+					userInput = Console.ReadLine().ToUpper();
+
+					if (userInput == "X" || userInput == "O")
+					{
+						break;
+					}
+					else
+					{
+						Console.WriteLine("Tapez X ou O!");
+					}
+				} while (userInput != "X" || userInput != "O");
+			}
+			else
+			{
+				Random jetoncpc = new Random();
+				int jetonCPC = jetoncpc.Next(1);
+				if (jetonCPC == 0)
+				{
+					joueurCPC = 'X';
+					Console.WriteLine("Le CPC joue avec X ");
 				}
 				else
 				{
-					Console.WriteLine("Tapez X ou O!");
+					joueurCPC = 'O';
+					Console.WriteLine("Le CPC joue avec O ");
 				}
 			}
+			countAquiLeTour++;
+			GamePlay(userInput[0], joueurCPC);     // appel de la méthode Gameplay avec passage en parametre du jeton
+
+
+			#region old
+
+			//string userInput = "null";
+			//bool premierePartie = true;
+			//if (premierePartie)
+			//{
+			//	Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
+			//	userInput = Console.ReadLine().ToUpper();
+
+			//	if (userInput == "X" || userInput == "O")
+			//	{
+			//		GamePlay(userInput[0]);     // appel de la méthode Gameplay avec passage en parametre du jeton
+			//	}
+			//	else
+			//	{
+			//		Console.WriteLine("Tapez X ou O!");
+			//		premierePartie = false;
+			//	}
+			//}
+			//else
+			//{
+			//	if (userInput == "X")
+			//	{
+
+			//	}
+			//}
+			#endregion
+
 		}
 
 		/// <summary>
@@ -35,7 +90,7 @@ namespace Tpinfo4
 		public static bool jouerCoupSuivant { get; set; }
 		public static int nbreCoup { get; set; }
 
-		public static void GamePlay(char z)
+		public static void GamePlay(char userInputChar, char joueurCPC)
 		{
 			bool nouveauJeu = true;
 			while (nouveauJeu)
@@ -79,7 +134,7 @@ namespace Tpinfo4
 							input2 = Console.ReadLine();
 							chiffre2 = Convert.ToInt32(input2);
 						}
-						matrice[chiffre1, chiffre2] = 'X';
+						matrice[chiffre1, chiffre2] = userInputChar;
 						PlaceDispo--;
 					}
 					#endregion
@@ -89,20 +144,8 @@ namespace Tpinfo4
 
 					///////////////// CPC joue
 
-					Random rnd = new Random();
-					int k = rnd.Next(1, 4);
-					int m = rnd.Next(1, 4);
+					CPCjouer(joueurCPC, matrice, PlaceDispo);
 
-					if (PlaceDispo > 0)
-					{
-						while (matrice[k, m] != 0)
-						{
-							k = rnd.Next(1, 4);
-							m = rnd.Next(1, 4);
-						}
-						matrice[k, m] = 'O';
-						PlaceDispo--;
-					}
 					#endregion
 
 					// affichage de la matrice
@@ -196,6 +239,7 @@ namespace Tpinfo4
 					if (nouvellePartie[0] == 'O')
 					{
 						Console.WriteLine("Alors c'est moi qui commence");
+						Jouer.ChoisirJeton();
 						inputTest2 = true;
 					}
 					else if (nouvellePartie[0] == 'N')  // si non alors exit du programme
@@ -214,12 +258,31 @@ namespace Tpinfo4
 			}
 		}
 
+		private static void CPCjouer(char joueurCPC, char[,] matrice, int PlaceDispo)
+		{
+			Random rnd = new Random();
+			int k = rnd.Next(1, 4);
+			int m = rnd.Next(1, 4);
+
+			if (PlaceDispo > 0)
+			{
+				while (matrice[k, m] != 0)
+				{
+					k = rnd.Next(1, 4);
+					m = rnd.Next(1, 4);
+				}
+				matrice[k, m] = joueurCPC;
+				PlaceDispo--;
+			}
+
+		}
+
 
 		/// <summary>
 		/// Méthode affichage du gagnant
 		/// </summary>
 		/// <param name="gagnant"></param>
-		public static void AfficherResultat(string gagnant)
+		private static void AfficherResultat(string gagnant)
 		{
 			Console.WriteLine("{0} gagne en {1} coups", gagnant, nbreCoup + 1);
 			jouerCoupSuivant = false;
