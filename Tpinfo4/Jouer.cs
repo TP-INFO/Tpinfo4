@@ -44,7 +44,7 @@ namespace Tpinfo4
 				else
 				{
 					joueurCPC = 'O';
-					Console.WriteLine("Le CPC joue avec O ");
+					Console.WriteLine("Le CPC joue  avec O ");
 				}
 			}
 			countAquiLeTour++;
