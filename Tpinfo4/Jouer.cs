@@ -13,13 +13,12 @@ namespace Tpinfo4
 			string userInput = "null";
 			char joueurCPC = '0';
 
-			int countAquiLeTour = 2;
-
-			if ((countAquiLeTour % 2) == 0)
+			int countAquiLeTour = 2;  // boucle compteur décide 1er joueur selon pair/impair
+			if ((countAquiLeTour % 2) == 0) // si pair alors USER joue en 1er
 			{
 				do  // boucle de validation input 
 				{
-					Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
+					Console.Write("Choisissez {0} ou {1}:", 'X', 'O');  // choix du jeton par USER
 					userInput = Console.ReadLine().ToUpper();
 
 					if (userInput == "X" || userInput == "O")
@@ -32,9 +31,9 @@ namespace Tpinfo4
 					}
 				} while (userInput != "X" || userInput != "O");
 			}
-			else
+			else  // sinon CPC joue en premier
 			{
-				Random jetoncpc = new Random();
+				Random jetoncpc = new Random();  // tirage aléatoire du jeton par CPC
 				int jetonCPC = jetoncpc.Next(1);
 				if (jetonCPC == 0)
 				{
@@ -110,9 +109,15 @@ namespace Tpinfo4
 					{
 						// input ligne
 
-						Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
-						string input = Console.ReadLine();
-						int chiffre1 = Convert.ToInt32(input);
+						int chiffre1 = 0;
+						bool testinput = false;
+						do
+						{
+							Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
+							string input = Console.ReadLine();
+							chiffre1 = Convert.ToInt32(input);
+							testinput = true;
+						} while (testinput);
 
 						//input colonne
 						Console.Write("Colonne > Entrez un chiffre entre 1 et 3: ");
