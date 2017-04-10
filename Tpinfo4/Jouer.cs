@@ -10,30 +10,26 @@ namespace Tpinfo4
 	{
 		public static void JouerPartie()
 		{
+			// modification de l'input pour eviter exception error dans méthode Gameplat (thanks to Mohammed)
+			Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
+			string userinput = Console.ReadLine();
 
-			try
+			if (userinput == "X")
 			{
-				// modification de l'input pour eviter exception  error dans méthode Gameplat (thanks to Mohammed)
-				Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
-				string userinput = Console.ReadLine();
-
-				if (userinput == "X")
-				{
 				//Console.WriteLine("Vous avez tapez {0}", a);
 				GamePlay(userinput[0]);
 
-				}
-				else if (userinput == "O")
-				{
+			}
+			else if (userinput == "O")
+			{
 				//Console.WriteLine("Vous avez tapez {0}", b);
 				GamePlay(userinput[0]);
-				}
 			}
-			catch (Exception)
+			else
 			{
-					Console.WriteLine("Invalid input. Tapez la lettre en MAJUSCULE!");
+				Console.WriteLine("Invalid input ");
+				System.Environment.Exit(0);
 			}
-
 		}
 
 		/// <summary>
