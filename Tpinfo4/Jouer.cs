@@ -12,8 +12,8 @@ namespace Tpinfo4
 		{
 			string userInput = "null";
 			char joueurCPC = '0';
+			int countAquiLeTour = 0;  // boucle compteur décide 1er joueur selon pair/impair
 
-			int countAquiLeTour = 2;  // boucle compteur décide 1er joueur selon pair/impair
 			if ((countAquiLeTour % 2) == 0) // si pair alors USER joue en 1er
 			{
 				do  // boucle de validation input 
@@ -30,8 +30,9 @@ namespace Tpinfo4
 						Console.WriteLine("Tapez X ou O!");
 					}
 				} while (userInput != "X" || userInput != "O");
+			DebuterAvecJoueur(userInput[0], joueurCPC);     // appel de la méthode Gameplay avec passage en parametre du jeton
 			}
-			else  // sinon CPC joue en premier
+			else if ((countAquiLeTour % 2) != 0)
 			{
 				Random jetoncpc = new Random();  // tirage aléatoire du jeton par CPC
 				int jetonCPC = jetoncpc.Next(1);
@@ -40,14 +41,13 @@ namespace Tpinfo4
 					joueurCPC = 'X';
 					Console.WriteLine("Le CPC joue avec X ");
 				}
-				else
+				else 
 				{
 					joueurCPC = 'O';
 					Console.WriteLine("Le CPC joue  avec O ");
 				}
 			}
 			countAquiLeTour++;
-			GamePlay(userInput[0], joueurCPC);     // appel de la méthode Gameplay avec passage en parametre du jeton
 
 
 			#region old
@@ -89,59 +89,24 @@ namespace Tpinfo4
 		public static bool jouerCoupSuivant { get; set; }
 		public static int nbreCoup { get; set; }
 
-		public static void GamePlay(char userInputChar, char joueurCPC)
+		public static void DebuterAvecJoueur(char userInputChar, char joueurCPC)
 		{
 			bool nouveauJeu = true;
 			while (nouveauJeu)
 			{
-
 				char[,] matrice = new char[4, 4];
 				nbreCoup = 0;
 				jouerCoupSuivant = true;
 				int PlaceDispo = 9;     // nbre de places dispo pour jouer à réduire à chaque coup
+
+				#region Jouer Coup Suivant
 
 				while (jouerCoupSuivant)        // boucle de coup suivant
 				{
 					#region User joue
 
 					//////////	entrée des input ligne/colonne par le USER pour placer son pion
-					if (PlaceDispo > 0)
-					{
-						// input ligne
-
-						int chiffre1 = 0;
-						bool testinput = false;
-						do
-						{
-							Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
-							string input = Console.ReadLine();
-							chiffre1 = Convert.ToInt32(input);
-							testinput = true;
-						} while (testinput);
-
-						//input colonne
-						Console.Write("Colonne > Entrez un chiffre entre 1 et 3: ");
-						string input2 = Console.ReadLine();
-						int chiffre2 = Convert.ToInt32(input2);
-
-						// pour éviter de rejouer sur une case déjà occupée (donc != 0)
-						while (matrice[chiffre1, chiffre2] != 0)
-						{
-							Console.WriteLine("Cette case est déjà prise!");
-
-							// input ligne
-							Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
-							input = Console.ReadLine();
-							chiffre1 = Convert.ToInt32(input);
-
-							// input colonne
-							Console.Write("Colonne > Entrez un chiffre entre 1 et 3: ");
-							input2 = Console.ReadLine();
-							chiffre2 = Convert.ToInt32(input2);
-						}
-						matrice[chiffre1, chiffre2] = userInputChar;
-						PlaceDispo--;
-					}
+					JouerAvecUser(userInputChar, matrice, PlaceDispo);
 					#endregion
 
 
@@ -149,76 +114,21 @@ namespace Tpinfo4
 
 					///////////////// CPC joue
 
-					CPCjouer(joueurCPC, matrice, PlaceDispo);
+					JouerAvecCPC(joueurCPC, matrice, PlaceDispo);
 
 					#endregion
 
-					// affichage de la matrice
-					for (int i = 0; i < matrice.GetLength(0); i++)
-					{
-						for (int j = 0; j < matrice.GetLength(1); j++)
-						{
-							//matrice[i, j] = z;
-							matrice[0, 0] = '_';
-							matrice[0, 1] = '1';
-							matrice[0, 2] = '2';
-							matrice[0, 3] = '3';
-
-							matrice[0, 0] = '_';
-							matrice[1, 0] = '1';
-							matrice[2, 0] = '2';
-							matrice[3, 0] = '3';
-							Console.Write(matrice[i, j]);
-						}
-						Console.WriteLine();
-					}
+					AfficherMatrice(matrice);
 
 					//calcul cas de victoire
 
 
 					#region // Victoires USER
-					/////////////////////////////// VICTOIRES USER
-					// victoirez horizontalez
-					if (((matrice[1, 1] == 'X') && (matrice[1, 2] == 'X') && (matrice[1, 3] == 'X')) || ((matrice[2, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[2, 3] == 'X')) || ((matrice[3, 1] == 'X') && (matrice[3, 2] == 'X') && (matrice[3, 3] == 'X')))
-					{
-						string gagnant = "USER";
-						AfficherResultat(gagnant);
-					}
-					// victoires verticales
-					else if (((matrice[1, 1] == 'X') && (matrice[2, 1] == 'X') && (matrice[3, 1] == 'X')) || ((matrice[1, 2] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 2] == 'X')) || ((matrice[1, 3] == 'X') && (matrice[2, 3] == 'X') && (matrice[3, 3] == 'X')))
-					{
-						string gagnant = "USER";
-						AfficherResultat(gagnant);
-					}
-					// victoires en diagonale
-					else if ((matrice[1, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 3] == 'X') || (matrice[1, 3] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 1] == 'X'))
-					{
-						string gagnant = "USER";
-						AfficherResultat(gagnant);
-					}
+					CalculerVictoireUser(matrice);
 					#endregion
 
 					#region Victoires CPC
-					//////////////////////////////////// VICTOIRES CPC
-					// horizontales
-					if (((matrice[1, 1] == 'O') && (matrice[1, 2] == 'O') && (matrice[1, 3] == 'O')) || ((matrice[2, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[2, 3] == 'O')) || ((matrice[3, 1] == 'O') && (matrice[3, 2] == 'O') && (matrice[3, 3] == 'O')))
-					{
-						string gagnant = "CPC";
-						AfficherResultat(gagnant);
-					}
-					// verticales
-					if (((matrice[1, 1] == 'O') && (matrice[2, 1] == 'O') && (matrice[3, 1] == 'O')) || ((matrice[1, 2] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 2] == 'O')) || ((matrice[1, 3] == 'O') && (matrice[2, 3] == 'O') && (matrice[3, 3] == 'O')))
-					{
-						string gagnant = "CPC";
-						AfficherResultat(gagnant);
-					}
-
-					// diagonales
-					else if ((matrice[1, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 3] == 'O') || (matrice[1, 3] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 1] == 'O'))
-					{
-						string gagnant = "CPC";
-						AfficherResultat(gagnant);
-					}
+					CalculerVictoireCPC(matrice);
 
 					#endregion
 					nbreCoup++;
@@ -232,38 +142,86 @@ namespace Tpinfo4
 					}
 					#endregion
 				}
+				#endregion
 
-				// demande si nouvelle partie
-				Console.WriteLine("Voulez-vous rejouer? O - encore / N - fin :");
-				string nouvellePartie = Console.ReadLine().ToUpper();
-
-				// boucle de test: jouer oui ou non by bool input
-				bool inputTest2 = false; // correct input test en boucle
-				while (!inputTest2)
-				{
-					if (nouvellePartie[0] == 'O')
-					{
-						Console.WriteLine("Alors c'est moi qui commence");
-						Jouer.ChoisirJeton();
-						inputTest2 = true;
-					}
-					else if (nouvellePartie[0] == 'N')  // si non alors exit du programme
-					{
-						Console.WriteLine("A la prochaine fois!");
-						Console.Read();
-						System.Environment.Exit(0);
-					}
-					else
-					{
-						Console.WriteLine("Tapez O pour oui, ou N pour non!");
-						inputTest2 = false;  // redemande correct input
-					}
-				}
-				nouveauJeu = true;  // novelle partie OK
+				DemanderRejouer();
 			}
 		}
 
-		private static void CPCjouer(char joueurCPC, char[,] matrice, int PlaceDispo)
+
+		private static void JouerAvecUser(char userInputChar, char[,] matrice, int PlaceDispo)
+		{
+			if (PlaceDispo > 0)
+			{
+				// input ligne
+				string input = "null";
+				int chiffre1 = 0;
+				bool repeat = true;
+				do
+				{
+					try
+					{
+						do
+						{
+							Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
+							input = Console.ReadLine();
+							chiffre1 = Convert.ToInt32(input);
+							repeat = false;
+						} while (chiffre1 < 1 || chiffre1 > 3);
+
+					}
+					catch (Exception)
+					{
+						Console.WriteLine("Rentrez un chiffre uniquement!!");
+					}
+				} while (repeat);
+
+
+				//input colonne
+				string input2 = "null";
+				int chiffre2 = 0;
+				bool repeat2 = true;
+				do
+				{
+					try
+					{
+						do
+						{
+							Console.Write("Colonne > Entrez un chiffre entre 1 et 3: ");
+							input2 = Console.ReadLine();
+							chiffre2 = Convert.ToInt32(input2);
+							repeat2 = false;
+						} while (chiffre2 < 1 || chiffre2 > 3);
+					}
+					catch (Exception)
+					{
+						Console.WriteLine("Rentrez un chiffre uniquement!!");
+
+					}
+				} while (repeat2);
+
+
+				// pour éviter de rejouer sur une case déjà occupée (donc != 0)
+				while (matrice[chiffre1, chiffre2] != 0)
+				{
+					Console.WriteLine("Cette case est déjà prise!");
+
+					// input ligne
+					Console.Write("Ligne > Entrez un chiffre entre 1 et 3: ");
+					input = Console.ReadLine();
+					chiffre1 = Convert.ToInt32(input);
+
+					// input colonne
+					Console.Write("Colonne > Entrez un chiffre entre 1 et 3: ");
+					input2 = Console.ReadLine();
+					chiffre2 = Convert.ToInt32(input2);
+				}
+				matrice[chiffre1, chiffre2] = userInputChar;
+				PlaceDispo--;
+			}
+		}
+
+		private static void JouerAvecCPC(char joueurCPC, char[,] matrice, int PlaceDispo)
 		{
 			Random rnd = new Random();
 			int k = rnd.Next(1, 4);
@@ -281,6 +239,107 @@ namespace Tpinfo4
 			}
 
 		}
+
+		private static void AfficherMatrice(char[,] matrice)
+		{
+			// affichage de la matrice
+			for (int i = 0; i < matrice.GetLength(0); i++)
+			{
+				for (int j = 0; j < matrice.GetLength(1); j++)
+				{
+					//matrice[i, j] = z;
+					matrice[0, 0] = '_';
+					matrice[0, 1] = '1';
+					matrice[0, 2] = '2';
+					matrice[0, 3] = '3';
+
+					matrice[0, 0] = '_';
+					matrice[1, 0] = '1';
+					matrice[2, 0] = '2';
+					matrice[3, 0] = '3';
+					Console.Write(matrice[i, j]);
+				}
+				Console.WriteLine();
+			}
+		}
+
+		private static void CalculerVictoireUser(char[,] matrice)
+		{
+			/////////////////////////////// VICTOIRES USER
+			// victoirez horizontalez
+			if (((matrice[1, 1] == 'X') && (matrice[1, 2] == 'X') && (matrice[1, 3] == 'X')) || ((matrice[2, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[2, 3] == 'X')) || ((matrice[3, 1] == 'X') && (matrice[3, 2] == 'X') && (matrice[3, 3] == 'X')))
+			{
+				string gagnant = "USER";
+				AfficherResultat(gagnant);
+			}
+			// victoires verticales
+			else if (((matrice[1, 1] == 'X') && (matrice[2, 1] == 'X') && (matrice[3, 1] == 'X')) || ((matrice[1, 2] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 2] == 'X')) || ((matrice[1, 3] == 'X') && (matrice[2, 3] == 'X') && (matrice[3, 3] == 'X')))
+			{
+				string gagnant = "USER";
+				AfficherResultat(gagnant);
+			}
+			// victoires en diagonale
+			else if ((matrice[1, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 3] == 'X') || (matrice[1, 3] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 1] == 'X'))
+			{
+				string gagnant = "USER";
+				AfficherResultat(gagnant);
+			}
+		}
+
+		private static void CalculerVictoireCPC(char[,] matrice)
+		{
+			//////////////////////////////////// VICTOIRES CPC
+			// horizontales
+			if (((matrice[1, 1] == 'O') && (matrice[1, 2] == 'O') && (matrice[1, 3] == 'O')) || ((matrice[2, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[2, 3] == 'O')) || ((matrice[3, 1] == 'O') && (matrice[3, 2] == 'O') && (matrice[3, 3] == 'O')))
+			{
+				string gagnant = "CPC";
+				AfficherResultat(gagnant);
+			}
+			// verticales
+			if (((matrice[1, 1] == 'O') && (matrice[2, 1] == 'O') && (matrice[3, 1] == 'O')) || ((matrice[1, 2] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 2] == 'O')) || ((matrice[1, 3] == 'O') && (matrice[2, 3] == 'O') && (matrice[3, 3] == 'O')))
+			{
+				string gagnant = "CPC";
+				AfficherResultat(gagnant);
+			}
+
+			// diagonales
+			else if ((matrice[1, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 3] == 'O') || (matrice[1, 3] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 1] == 'O'))
+			{
+				string gagnant = "CPC";
+				AfficherResultat(gagnant);
+			}
+		}
+
+		private static void DemanderRejouer()
+		{
+			// demande si nouvelle partie
+			Console.WriteLine("Voulez-vous rejouer? O - encore / N - fin :");
+			string nouvellePartie = Console.ReadLine().ToUpper();
+
+			// boucle de test: jouer oui ou non by bool input
+			bool inputTest2 = false; // correct input test en boucle
+			while (!inputTest2)
+			{
+				if (nouvellePartie[0] == 'O')
+				{
+					Console.WriteLine("Alors c'est moi qui commence");
+					Jouer.ChoisirJeton();
+					inputTest2 = true;
+				}
+				else if (nouvellePartie[0] == 'N')  // si non alors exit du programme
+				{
+					Console.WriteLine("A la prochaine fois!");
+					Console.Read();
+					System.Environment.Exit(0);
+				}
+				else
+				{
+					Console.WriteLine("Tapez O pour oui, ou N pour non!");
+					inputTest2 = false;  // redemande correct input
+				}
+			}
+		}
+
 
 
 		/// <summary>

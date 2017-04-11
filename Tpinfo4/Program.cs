@@ -13,6 +13,6 @@ namespace Tpinfo4
 		{
 			// appel de la méthode Jouer
 			Jouer.ChoisirJeton();
-        }
-    }
+		}
+	}
 }
