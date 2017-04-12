@@ -8,76 +8,49 @@ namespace Tpinfo4
 {
 	public class Jouer
 	{
+
+		static bool _userFirst = true;
+
 		public static void ChoisirJeton()
 		{
 			string userInput = "null";
 			char joueurCPC = '0';
-			int countAquiLeTour = 0;  // boucle compteur décide 1er joueur selon pair/impair
+			int countAquiLeTour = 2;  // boucle compteur décide 1er joueur selon pair/impair
 
-			if ((countAquiLeTour % 2) == 0) // si pair alors USER joue en 1er
-			{
-				do  // boucle de validation input 
+				if (_userFirst) // si pair alors USER joue en 1er
 				{
-					Console.Write("Choisissez {0} ou {1}:", 'X', 'O');  // choix du jeton par USER
-					userInput = Console.ReadLine().ToUpper();
+					do  // boucle de validation input 
+					{
+						Console.Write("Choisissez {0} ou {1}:", 'X', 'O');  // choix du jeton par USER
+						userInput = Console.ReadLine().ToUpper();
 
-					if (userInput == "X" || userInput == "O")
-					{
-						break;
-					}
-					else
-					{
-						Console.WriteLine("Tapez X ou O!");
-					}
-				} while (userInput != "X" || userInput != "O");
-			DebuterAvecJoueur(userInput[0], joueurCPC);     // appel de la méthode Gameplay avec passage en parametre du jeton
-			}
-			else if ((countAquiLeTour % 2) != 0)
-			{
-				Random jetoncpc = new Random();  // tirage aléatoire du jeton par CPC
-				int jetonCPC = jetoncpc.Next(1);
-				if (jetonCPC == 0)
-				{
-					joueurCPC = 'X';
-					Console.WriteLine("Le CPC joue avec X ");
+						if (userInput == "X" || userInput == "O")
+						{
+							break;
+						}
+						else
+						{
+							Console.WriteLine("Tapez X ou O!");
+						}
+					} while (userInput != "X" || userInput != "O");
+					DebuterAvecJoueur(userInput[0], joueurCPC);     // appel de la méthode Gameplay avec passage en parametre du jeton
 				}
 				else 
 				{
-					joueurCPC = 'O';
-					Console.WriteLine("Le CPC joue  avec O ");
+					Random jetoncpc = new Random();  // tirage aléatoire du jeton par CPC
+					int jetonCPC = jetoncpc.Next(1);
+					if (jetonCPC == 0)
+					{
+						joueurCPC = 'X';
+						Console.WriteLine("Le CPC joue avec X ");
+					}
+					else
+					{
+						joueurCPC = 'O';
+						Console.WriteLine("Le CPC joue  avec O ");
+					}
 				}
-			}
-			countAquiLeTour++;
-
-
-			#region old
-
-			//string userInput = "null";
-			//bool premierePartie = true;
-			//if (premierePartie)
-			//{
-			//	Console.Write("Choisissez {0} ou {1}:", 'X', 'O');
-			//	userInput = Console.ReadLine().ToUpper();
-
-			//	if (userInput == "X" || userInput == "O")
-			//	{
-			//		GamePlay(userInput[0]);     // appel de la méthode Gameplay avec passage en parametre du jeton
-			//	}
-			//	else
-			//	{
-			//		Console.WriteLine("Tapez X ou O!");
-			//		premierePartie = false;
-			//	}
-			//}
-			//else
-			//{
-			//	if (userInput == "X")
-			//	{
-
-			//	}
-			//}
-			#endregion
-
+				countAquiLeTour++;
 		}
 
 		/// <summary>
@@ -147,7 +120,6 @@ namespace Tpinfo4
 				DemanderRejouer();
 			}
 		}
-
 
 		private static void JouerAvecUser(char userInputChar, char[,] matrice, int PlaceDispo)
 		{
@@ -323,8 +295,10 @@ namespace Tpinfo4
 				if (nouvellePartie[0] == 'O')
 				{
 					Console.WriteLine("Alors c'est moi qui commence");
-					Jouer.ChoisirJeton();
+
 					inputTest2 = true;
+					_userFirst = !_userFirst;
+					ChoisirJeton();
 				}
 				else if (nouvellePartie[0] == 'N')  // si non alors exit du programme
 				{
@@ -338,7 +312,8 @@ namespace Tpinfo4
 					inputTest2 = false;  // redemande correct input
 				}
 			}
-		}
+			
+		} 
 
 
 
