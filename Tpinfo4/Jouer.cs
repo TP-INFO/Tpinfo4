@@ -10,57 +10,64 @@ namespace Tpinfo4
 	{
 
 		static bool _userFirst = true;
+		public static bool jouerCoupSuivant { get; set; }
+		public static int nbreCoup { get; set; }
 
 		public static void ChoisirJeton()
 		{
 			string userInput = "null";
+			char _userInput = '0';
 			char joueurCPC = '0';
 			int countAquiLeTour = 2;  // boucle compteur décide 1er joueur selon pair/impair
 
-				if (_userFirst) // si pair alors USER joue en 1er
+			if (_userFirst) // si pair alors USER joue en 1er
+			{
+				do  // boucle de validation input 
 				{
-					do  // boucle de validation input 
-					{
-						Console.Write("Choisissez {0} ou {1}:", 'X', 'O');  // choix du jeton par USER
-						userInput = Console.ReadLine().ToUpper();
+					Console.Write("Choisissez {0} ou {1}:", 'X', 'O');  // choix du jeton par USER
+					userInput = Console.ReadLine().ToUpper();
 
-						if (userInput == "X" || userInput == "O")
-						{
-							break;
-						}
-						else
-						{
-							Console.WriteLine("Tapez X ou O!");
-						}
-					} while (userInput != "X" || userInput != "O");
-					DebuterAvecJoueur(userInput[0], joueurCPC);     // appel de la méthode Gameplay avec passage en parametre du jeton
-				}
-				else 
-				{
-					Random jetoncpc = new Random();  // tirage aléatoire du jeton par CPC
-					int jetonCPC = jetoncpc.Next(1);
-					if (jetonCPC == 0)
+					if (userInput == "X" || userInput == "O")
 					{
-						joueurCPC = 'X';
-						Console.WriteLine("Le CPC joue avec X ");
+						break;
 					}
 					else
 					{
-						joueurCPC = 'O';
-						Console.WriteLine("Le CPC joue  avec O ");
+						Console.WriteLine("Tapez X ou O!");
 					}
+				} while (userInput != "X" || userInput != "O");
+			}
+			else
+			{
+				Random jetoncpc = new Random();  // tirage aléatoire du jeton par CPC
+				int jetonCPC = jetoncpc.Next(1);
+				if (jetonCPC == 0)
+				{
+					joueurCPC = 'X';
+					Console.WriteLine("Le CPC joue avec X ");
+					Console.WriteLine("Vous jouez avec O");
+					_userInput = 'O';
 				}
-				countAquiLeTour++;
+				else
+				{
+					joueurCPC = 'O';
+					Console.WriteLine("Le CPC joue  avec O ");
+					Console.WriteLine("Vous jouez avec X");
+					_userInput = 'X';
+				}
+			}
+			countAquiLeTour++;
+			if (_userFirst)
+			{
+				DebuterAvecJoueur(userInput[0], joueurCPC);     // appel de la méthode Gameplay avec passage en parametre du jeton
+			}
+			else
+			{
+				DebuterAvecCPC(_userInput, joueurCPC);
+			}
+
+			DemanderRejouer();
 		}
-
-		/// <summary>
-		/// méthode établissant les coups des joueurs
-		/// </summary>
-		/// <param name="z"></param>
-		/// 
-
-		public static bool jouerCoupSuivant { get; set; }
-		public static int nbreCoup { get; set; }
 
 		public static void DebuterAvecJoueur(char userInputChar, char joueurCPC)
 		{
@@ -74,7 +81,7 @@ namespace Tpinfo4
 
 				#region Jouer Coup Suivant
 
-				while (jouerCoupSuivant)        // boucle de coup suivant
+				while (jouerCoupSuivant)        // boucle    de coup suivant
 				{
 					#region User joue
 
@@ -89,6 +96,67 @@ namespace Tpinfo4
 
 					JouerAvecCPC(joueurCPC, matrice, PlaceDispo);
 
+					#endregion
+
+					AfficherMatrice(matrice);
+
+					//calcul cas de victoire
+
+
+					#region // Victoires USER
+					CalculerVictoireUser(matrice);
+					#endregion
+
+					#region Victoires CPC
+					CalculerVictoireCPC(matrice);
+
+					#endregion
+					nbreCoup++;
+
+					#region Match nul
+					// cas match nul
+					if (PlaceDispo == 0)
+					{
+						Console.WriteLine("Match nul!");
+						break;
+					}
+					#endregion
+				}
+				#endregion
+
+				DemanderRejouer();
+			}
+		}
+
+		public static void DebuterAvecCPC(char userInputChar, char joueurCPC)
+		{
+			bool nouveauJeu = true;
+			while (nouveauJeu)
+			{
+				char[,] matrice = new char[4, 4];
+				nbreCoup = 0;
+				jouerCoupSuivant = true;
+				int PlaceDispo = 9;     // nbre de places dispo pour jouer à réduire à chaque coup
+
+				#region Jouer Coup Suivant
+
+				while (jouerCoupSuivant)        // boucle de coup suivant
+				{
+
+					#region CPC joue
+
+					///////////////// CPC joue
+
+					JouerAvecCPC(joueurCPC, matrice, PlaceDispo);
+
+					#endregion
+
+					AfficherMatrice(matrice);
+
+					#region User joue
+
+					//////////	entrée des input ligne/colonne par le USER pour placer son pion
+					JouerAvecUser(userInputChar, matrice, PlaceDispo);
 					#endregion
 
 					AfficherMatrice(matrice);
@@ -191,10 +259,13 @@ namespace Tpinfo4
 				matrice[chiffre1, chiffre2] = userInputChar;
 				PlaceDispo--;
 			}
+			
 		}
 
 		private static void JouerAvecCPC(char joueurCPC, char[,] matrice, int PlaceDispo)
 		{
+
+
 			Random rnd = new Random();
 			int k = rnd.Next(1, 4);
 			int m = rnd.Next(1, 4);
@@ -294,7 +365,7 @@ namespace Tpinfo4
 			{
 				if (nouvellePartie[0] == 'O')
 				{
-					Console.WriteLine("Alors c'est moi qui commence");
+					Console.WriteLine("Alors on inverse qui commence!");
 
 					inputTest2 = true;
 					_userFirst = !_userFirst;
@@ -312,15 +383,9 @@ namespace Tpinfo4
 					inputTest2 = false;  // redemande correct input
 				}
 			}
-			
-		} 
 
+		}
 
-
-		/// <summary>
-		/// Méthode affichage du gagnant
-		/// </summary>
-		/// <param name="gagnant"></param>
 		private static void AfficherResultat(string gagnant)
 		{
 			Console.WriteLine("{0} gagne en {1} coups", gagnant, nbreCoup + 1);
