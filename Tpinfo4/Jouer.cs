@@ -236,81 +236,27 @@ namespace Tpinfo4
 
 					if (((matrice[1, 1] == 'X') && (matrice[1, 2] == 'X') && (matrice[1, 3] == 'X')) || ((matrice[2, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[2, 3] == 'X')) || ((matrice[3, 1] == 'X') && (matrice[3, 2] == 'X') && (matrice[3, 3] == 'X')))
 					{
-						if (userInputChar == 'X')
-						{
-							string gagnant = "USER";
-							AfficherResultat(gagnant);
-						}
-						else
-						{
-							string gagnant = "CPC";
-							AfficherResultat(gagnant);
-						}
+						DesignerGagnantX(userInputChar);
 					}
 
 					else if (((matrice[1, 1] == 'O') && (matrice[1, 2] == 'O') && (matrice[1, 3] == 'O')) || ((matrice[2, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[2, 3] == 'O')) || ((matrice[3, 1] == 'O') && (matrice[3, 2] == 'O') && (matrice[3, 3] == 'O')))
 					{
-						if (userInputChar == 'O')
-						{
-							string gagnant = "USER";
-							AfficherResultat(gagnant);
-						}
-						else
-						{
-							string gagnant = "CPC";
-							AfficherResultat(gagnant);
-						}
+						DesignerGagnantO(userInputChar);
 					}
 
 					// victoires verticales
 					else if (((matrice[1, 1] == 'X') && (matrice[2, 1] == 'X') && (matrice[3, 1] == 'X')) || ((matrice[1, 2] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 2] == 'X')) || ((matrice[1, 3] == 'X') && (matrice[2, 3] == 'X') && (matrice[3, 3] == 'X')))
-						if (userInputChar == 'X')
-						{
-							string gagnant = "USER";
-							AfficherResultat(gagnant);
-						}
-						else
-						{
-							string gagnant = "CPC";
-							AfficherResultat(gagnant);
-						}
+						DesignerGagnantX(userInputChar);
 
 					else if (((matrice[1, 1] == 'O') && (matrice[2, 1] == 'O') && (matrice[3, 1] == 'O')) || ((matrice[1, 2] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 2] == 'O')) || ((matrice[1, 3] == 'O') && (matrice[2, 3] == 'O') && (matrice[3, 3] == 'O')))
-						if (userInputChar == 'O')
-						{
-							string gagnant = "USER";
-							AfficherResultat(gagnant);
-						}
-						else
-						{
-							string gagnant = "CPC";
-							AfficherResultat(gagnant);
-						}
+						DesignerGagnantO(userInputChar);
 
 					// victoires en diagonale
 					else if ((matrice[1, 1] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 3] == 'X') || (matrice[1, 3] == 'X') && (matrice[2, 2] == 'X') && (matrice[3, 1] == 'X'))
-						if (userInputChar == 'X')
-						{
-							string gagnant = "USER";
-							AfficherResultat(gagnant);
-						}
-						else
-						{
-							string gagnant = "CPC";
-							AfficherResultat(gagnant);
-						}
+						DesignerGagnantX(userInputChar);
 
 					else if ((matrice[1, 1] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 3] == 'O') || (matrice[1, 3] == 'O') && (matrice[2, 2] == 'O') && (matrice[3, 1] == 'O'))
-						if (userInputChar == 'O')
-						{
-							string gagnant = "USER";
-							AfficherResultat(gagnant);
-						}
-						else
-						{
-							string gagnant = "CPC";
-							AfficherResultat(gagnant);
-						}
+						DesignerGagnantO(userInputChar);
 					#endregion
 					nbreCoup++;
 
@@ -330,6 +276,34 @@ namespace Tpinfo4
 					//#endregion
 				}
 				nouveauJeu = false;  // novelle partie OK
+			}
+		}
+
+		private static void DesignerGagnantX(char userInputChar)
+		{
+			if (userInputChar == 'X')
+			{
+				string gagnant = "USER";
+				AfficherResultat(gagnant);
+			}
+			else
+			{
+				string gagnant = "CPC";
+				AfficherResultat(gagnant);
+			}
+		}
+
+		private static void DesignerGagnantO(char userInputChar)
+		{
+			if (userInputChar == 'O')
+			{
+				string gagnant = "USER";
+				AfficherResultat(gagnant);
+			}
+			else
+			{
+				string gagnant = "CPC";
+				AfficherResultat(gagnant);
 			}
 		}
 
